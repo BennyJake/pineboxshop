@@ -1,0 +1,7 @@
+{
+    "require": {
+        "phpmailer/phpmailer": "^6.1",
+        "rakit/validation": "^1.2",
+        "sabre/http": "^5.0"
+    }
+}
