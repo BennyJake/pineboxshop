@@ -21,7 +21,8 @@ h6 {
 #home-logo{
     z-index: 0;
     fill: rgba(0, 0, 0, 0.7);
-    height:80%;
+    max-height:80%;
+    max-width:80%;
 }
 
 .full-window-height{
@@ -132,21 +133,21 @@ header .overlay {
 }
 
 .bg-primary {
-  background-color: #ee0979 !important;
+  background-color: #160700 !important;
 }
 
 .btn-primary {
-  background-color: #ee0979;
-  border-color: #ee0979;
+  background-color: #160700;
+  border-color: #0C0300;
 }
 
 .btn-primary:active, .btn-primary:focus, .btn-primary:hover {
-  background-color: #bd0760 !important;
-  border-color: #bd0760 !important;
+  background-color: #160700 !important;
+  border-color: #0C0300 !important;
 }
 
 .btn-primary:focus {
-  box-shadow: 0 0 0 0.2rem rgba(238, 9, 121, 0.5);
+  box-shadow: 0 0 0 0.2rem rgba(22, 7, 0, 0.5);
 }
 
 .btn-secondary {

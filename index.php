@@ -48,13 +48,15 @@ $request = HTTP\Sapi::getRequest();
 $post = $request->getPostData();
 $validationArray = [];
 if(isset($post) && !empty($post)){
-    $validator = new Validator;
+    $validator = new Validator([
+            'required' => 'Please provide a :attribute'
+    ]);
 
     // make it
     $validation = $validator->make($post, [
         'name'                  => 'required',
         'contact'               => 'required',
-        'email'                 => 'required_if:contact,emailOption',
+        'email'                 => 'required_if:contact,emailOption|email',
         'phone'                 => 'required_if:contact,phoneOption',
         'project'               => 'required',
         'custom'                => 'required_if:project,customOption',
@@ -62,11 +64,46 @@ if(isset($post) && !empty($post)){
 
     $validation->validate();
 
-    $validationArray = $validation->errors->toArray();
+    $errors = $validation->errors();
+    $validationArray = $errors->all('<li>:message</li>');
+
+    if(sizeof($validationArray) == 0){
+
+        $validatedData = $validation->getValidatedData();
+
+        $mail = new \PHPMailer\PHPMailer\PHPMailer();
+
+        $mail->IsSMTP();
+        $mail->Mailer = "smtp";
+        $mail->SMTPDebug  = 1;
+        $mail->SMTPAuth   = TRUE;
+        $mail->SMTPSecure = "tls";
+        $mail->Port       = 587;
+        $mail->Host       = "smtp.gmail.com";
+        $mail->Username   = "me@bennyjake.com";
+        $mail->Password   = "quietracket22";
+
+        $mail->setFrom('me@bennyjake.shop');
+        $mail->addAddress('ben.chrisman.87@gmail.com', 'Ben Chrisman');
+
+        // Content
+        $mail->isHTML(true);                                  // Set email format to HTML
+        $mail->Subject = 'The Pinebox Shop Website';
+        $mail->Body    = 'Name: ' . $validatedData['name'];
+        $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+        try{
+            $mail->send();
+        } catch (Exception $e) {
+            //TODO: Catch this somehow
+            //echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        }
+    }
 }
 ?>
 <!DOCTYPE html>
 <html lang="en">
+<head>
 <style type="text/css">
     header {
         background-image: url(<?= random_pic("img/header", "main")?>);
@@ -137,7 +174,7 @@ if(isset($post) && !empty($post)){
         text-decoration: underline;
     }
 </style>
-<head>
+
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -147,9 +184,8 @@ if(isset($post) && !empty($post)){
   <title>One Page Wonder - Start Bootstrap Template</title>
     <script src="js/lightbox-plus-jquery.js"></script>
 
-  <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <!-- Custom fonts for this template -->
   <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
@@ -168,7 +204,29 @@ if(isset($post) && !empty($post)){
 
 
 </head>
-
+<style type="text/css">
+    header {
+        background: url("img/woodshop.jpg");
+    }
+    body {
+        background-color:#F2EADE !important;
+        color: #160700 !important;
+    }
+    h1, h2, h3, p, span{
+        color: #160700 !important;
+    }
+    #gallery img{
+        vertical-align: middle;
+        border-style: none;
+        width: 100%;
+    }
+    #home-logo{
+        color:#160700;
+    }
+    .navbar-custom{
+        background-color: #160700;
+    }
+</style>
 <body>
 
   <!-- Navigation -->
@@ -220,7 +278,7 @@ if(isset($post) && !empty($post)){
           </div>
       </div>-->
       <div class="d-flex text-center align-items-center">
-              <img src="img/PB_Logo_Final.svg" id="home-logo" class="centered">
+              <img src="img/PB_Logo_Final.svg" id="home-logo" class="centered"/>
       </div>
   </header>
 
@@ -331,22 +389,25 @@ if(isset($post) && !empty($post)){
                 <div class="form-group">
                     <label for="custom">Describe your custom project</label>
                     <textarea name="custom" class="form-control" rows="5"></textarea>
-                    <?php
-                    var_dump($validationArray);
-                    ?>
-                    <div class="invalid-feedback">
-                    <?php
-                    if(!empty($validationArray) && isset($validationArray['custom'])){ ?>
-                        <ul>
-                            <?php foreach($validationArray['custom'] as $reason => $message) { ?>
-                                <li><?= $message ?></li>
-                            <?php
-                            }
-                            ?>
-                        </ul>
-                    <?php } ?>
+
+                </div>
+                <?php
+                if(!empty($validationArray) && isset($validationArray)){ ?>
+                <div class="error">
+                    <div class="invalid-feedback" style="display:block;font-size:1.2rem;">
+                        <?php
+                        if(!empty($validationArray) && isset($validationArray)){ ?>
+                            <ul>
+                                <?php foreach($validationArray as $message) { ?>
+                                    <?= $message ?>
+                                    <?php
+                                }
+                                ?>
+                            </ul>
+                        <?php } ?>
                     </div>
                 </div>
+                <?php } ?>
                 <div class="form-group">
                     <input name="submit" class="form-control btn-primary" type="submit" value="Send Message">
                 </div>
@@ -406,7 +467,7 @@ if(isset($post) && !empty($post)){
   </div>
 
   <!-- Footer -->
-  <footer class="py-5 bg-black">
+  <footer class="py-5">
     <div class="container">
       <p class="m-0 text-center text-white small">Copyright &copy; The Pine Box Shop <?= date('Y', strtotime('now')) ?></p>
     </div>
@@ -414,13 +475,14 @@ if(isset($post) && !empty($post)){
   </footer>
 
   <!-- Bootstrap core JavaScript -->
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
   <!-- Import jQuery and PhotoSwipe Scripts -->
   <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.0/photoswipe.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.0/photoswipe-ui-default.min.js"></script>
+
+
 </body>
 <script src="js/menuspy.min.js"></script>
 <script>
@@ -431,6 +493,7 @@ if(isset($post) && !empty($post)){
     $(".nav-link").click(function(event) {
         event.preventDefault();
         var target = $(this).attr('href');
+        $('#navbarResponsive').collapse('hide');
         $('html,body').animate({
                 scrollTop: $(target).offset().top},
             'slow');
@@ -554,7 +617,7 @@ if(isset($post) && !empty($post)){
             // Define object and gallery options
             var $pswp = $('.pswp')[0],
                 options = {
-                    index: $(this).parent('figure').index(),
+                    index: $(this).parent('figure').parent().index(),
                     bgOpacity: 0.85,
                     showHideOpacity: true
                 };
