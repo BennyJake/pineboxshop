@@ -15,6 +15,7 @@
       <path value="$PROJECT_DIR$/vendor/bootstrap/js" />
       <path value="$PROJECT_DIR$/vendor/rakit/validation" />
       <path value="$PROJECT_DIR$/vendor/bootstrap/css" />
+      <path value="$PROJECT_DIR$/vendor/facebook/graph-sdk" />
     </include_path>
   </component>
 </project>

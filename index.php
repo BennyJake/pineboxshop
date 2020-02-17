@@ -4,6 +4,45 @@ require_once("vendor/autoload.php");
 use Rakit\Validation\Validator;
 use Sabre\HTTP;
 
+/*$fb = new \Facebook\Facebook([
+    'app_id' => '',
+    'app_secret' => '',
+    'default_graph_version' => 'v2.10',
+    //'default_access_token' => '{access-token}', // optional
+]);
+
+$helper = $fb->getRedirectLoginHelper();
+
+try {
+    $accessToken = $helper->getAccessToken();
+} catch(Facebook\Exceptions\FacebookResponseException $e) {
+    // When Graph returns an error
+    echo 'Graph returned an error: ' . $e->getMessage();
+    exit;
+} catch(Facebook\Exceptions\FacebookSDKException $e) {
+    // When validation fails or other local issues
+    echo 'Facebook SDK returned an error: ' . $e->getMessage();
+    exit;
+}
+
+
+try {
+    // Get the \Facebook\GraphNodes\GraphUser object for the current user.
+    // If you provided a 'default_access_token', the '{access-token}' is optional.
+    $response = $fb->get('/me', $accessToken);
+} catch(\Facebook\Exceptions\FacebookResponseException $e) {
+    // When Graph returns an error
+    echo 'Graph returned an error: ' . $e->getMessage();
+    exit;
+} catch(\Facebook\Exceptions\FacebookSDKException $e) {
+    // When validation fails or other local issues
+    echo 'Facebook SDK returned an error: ' . $e->getMessage();
+    exit;
+}
+
+$me = $response->getGraphUser();
+echo 'Logged in as ' . $me->getName();*/
+
 $request = HTTP\Sapi::getRequest();
 
 $post = $request->getPostData();
@@ -37,6 +76,66 @@ if(isset($post) && !empty($post)){
         border-style: none;
         width: 100%;
     }
+    body {
+        background-color: #cccccc;
+        color: #333333;
+    }
+    .masonry-wrapper {
+        padding: 1.5em;
+        max-width: 1140px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+    .masonry {
+        display: grid;
+        grid-template-columns: repeat(1, minmax(100px,1fr));
+        grid-gap: 10px;
+        grid-auto-rows: 0;
+    }
+    @media only screen and (max-width: 1023px) and (min-width: 768px) {
+        .masonry {
+            grid-template-columns: repeat(2, minmax(100px,1fr));
+        }
+    }
+    @media only screen and (min-width: 1024px) {
+        .masonry {
+            grid-template-columns: repeat(3, minmax(100px,1fr));
+        }
+    }
+    .masonry-item, .masonry-content {
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    .masonry-item {
+        filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, .3));
+        transition: filter .25s ease-in-out;
+    }
+    .masonry-item:hover {
+        filter: drop-shadow(0px 5px 5px rgba(0, 0, 0, .3));
+    }
+    .masonry-content {
+        overflow: hidden;
+    }
+    .masonry-item {
+        color: #111111;
+        background-color: #f9f9f9;
+    }
+    .masonry-title, .masonry-description {
+        margin: 0;
+    }
+    .masonry-title {
+        font-weight: 700;
+        font-size: 1.1rem;
+        padding: 1rem 1.5rem;
+    }
+    .masonry-description {
+        padding: 1.5rem;
+        font-size: .75rem;
+        border-top: 1px solid rgba(0, 0, 0, .05);
+    }
+    .active .nav-link{
+        text-decoration: underline;
+    }
 </style>
 <head>
 
@@ -49,9 +148,10 @@ if(isset($post) && !empty($post)){
     <script src="js/lightbox-plus-jquery.js"></script>
 
   <!-- Bootstrap core CSS -->
-  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-  <!-- Custom fonts for this template -->
+
+    <!-- Custom fonts for this template -->
   <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
 
@@ -74,23 +174,23 @@ if(isset($post) && !empty($post)){
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
     <div class="container">
-      <a class="navbar-brand" href="#">The Pinebox Shop</a>
+      <a class="navbar-brand" data-link="#home" href="#home">The Pinebox Shop</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" data-link="#home" href="#">Home</a>
+            <a class="nav-link" data-link="#home" href="#home">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-link="#about_me" href="#">About Me</a>
+            <a class="nav-link" data-link="#about_me" href="#about_me">About Me</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-link="#gallery" href="#">Gallery</a>
+            <a class="nav-link" data-link="#gallery" href="#gallery">Gallery</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-link="#contact_me" href="#">Contact Me</a>
+            <a class="nav-link" data-link="#contact_me" href="#contact_me">Contact Me</a>
           </li>
         </ul>
       </div>
@@ -151,19 +251,31 @@ if(isset($post) && !empty($post)){
                       <p>About me goes here.</p>
                   </div>
                   <div class="row">
-                  <?php for($i = 0; $i < 40; $i++){
-                  $randomPic = random_pic("img/gallery", "gallery") ?>
-                      <div class="col-lg-3" style="margin:0;padding:0">
-                  <!-- Use figure for a more semantic html -->
-                  <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject" style="margin:0;padding:0;">
-                      <!-- Link to the big image, not mandatory, but usefull when there is no JS -->
-                      <a href="<?= $randomPic ?>" data-caption="Sea side, south shore<br><em class='text-muted'>© Dominik Schröder</em>" data-width="1200" data-height="900" itemprop="contentUrl">
-                          <!-- Thumbnail -->
-                          <img src="<?= $randomPic ?>" itemprop="thumbnail" alt="Image description">
-                      </a>
-                  </figure>
-                      </div>
-                  <?php } ?>
+
+                      <div class="masonry-wrapper">
+                          <div class="masonry">
+                              <?php foreach(scandir('img/gallery_full') as $img) {
+                                  if ($img != '.' && $img != '..') {
+                                      ?>
+                                      <div class="masonry-item">
+                                          <div class="masonry-content">
+                                              <a href="img/gallery_full/<?= $img ?>" data-caption="Sea side, south shore<br><em class='text-muted'>© Dominik Schröder</em>" data-width="1200" data-height="900" itemprop="contentUrl">
+                                              <img src="img/gallery_full/<?= $img ?>" alt="Dummy Image">
+                                              </a>
+                                              <h3 class="masonry-title">Nesciunt aspernatur eaque similique laudantium
+                                                  a</h3>
+                                              <p class="masonry-description">Lorem ipsum dolor sit amet, consectetur
+                                                  adipisicing elit. Assumenda modi inventore, totam vero consequuntur,
+                                                  aut animi veritatis tempora nulla facere placeat velit illum explicabo
+                                                  dicta enim ipsum. Vitae ducimus, ratione.</p>
+                                          </div>
+                                      </div>
+                                  <?php }
+                              }
+                                  ?>
+                          </div>
+                      </div><script src="//unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+
                   </div>
               </div>
 
@@ -296,22 +408,29 @@ if(isset($post) && !empty($post)){
   <!-- Footer -->
   <footer class="py-5 bg-black">
     <div class="container">
-      <p class="m-0 text-center text-white small">Copyright &copy; Your Website 2019</p>
+      <p class="m-0 text-center text-white small">Copyright &copy; The Pine Box Shop <?= date('Y', strtotime('now')) ?></p>
     </div>
     <!-- /.container -->
   </footer>
 
   <!-- Bootstrap core JavaScript -->
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
 
   <!-- Import jQuery and PhotoSwipe Scripts -->
   <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.0/photoswipe.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.0/photoswipe-ui-default.min.js"></script>
 </body>
-<script type="text/javascript">
-    $(".nav-link").click(function() {
-        var target = $(this).attr('data-link');
+<script src="js/menuspy.min.js"></script>
+<script>
+
+    var elm = document.querySelector('.navbar');
+    var ms = new MenuSpy(elm);
+
+    $(".nav-link").click(function(event) {
+        event.preventDefault();
+        var target = $(this).attr('href');
         $('html,body').animate({
                 scrollTop: $(target).offset().top},
             'slow');
@@ -320,11 +439,105 @@ if(isset($post) && !empty($post)){
 <script>
     'use strict';
     /* global jQuery, PhotoSwipe, PhotoSwipeUI_Default, console */
+    /**
+     * Set appropriate spanning to any masonry item
+     *
+     * Get different properties we already set for the masonry, calculate
+     * height or spanning for any cell of the masonry grid based on its
+     * content-wrapper's height, the (row) gap of the grid, and the size
+     * of the implicit row tracks.
+     *
+     * @param item Object A brick/tile/cell inside the masonry
+     * @link https://w3bits.com/css-grid-masonry/
+     */
+    function resizeMasonryItem(item){
+        /* Get the grid object, its row-gap, and the size of its implicit rows */
+        var grid = document.getElementsByClassName('masonry')[0];
+        if( grid ) {
+            var rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap')),
+                rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows')),
+                gridImagesAsContent = item.querySelector('img.masonry-content');
+
+            /*
+             * Spanning for any brick = S
+             * Grid's row-gap = G
+             * Size of grid's implicitly create row-track = R
+             * Height of item content = H
+             * Net height of the item = H1 = H + G
+             * Net height of the implicit row-track = T = G + R
+             * S = H1 / T
+             */
+            var rowSpan = Math.ceil((item.querySelector('.masonry-content').getBoundingClientRect().height+rowGap)/(rowHeight+rowGap));
+
+            /* Set the spanning as calculated above (S) */
+            item.style.gridRowEnd = 'span '+rowSpan;
+            if(gridImagesAsContent) {
+                item.querySelector('img.masonry-content').style.height = item.getBoundingClientRect().height + "px";
+            }
+        }
+    }
+
+    /**
+     * Apply spanning to all the masonry items
+     *
+     * Loop through all the items and apply the spanning to them using
+     * `resizeMasonryItem()` function.
+     *
+     * @uses resizeMasonryItem
+     * @link https://w3bits.com/css-grid-masonry/
+     */
+    function resizeAllMasonryItems(){
+        // Get all item class objects in one list
+        var allItems = document.querySelectorAll('.masonry-item');
+
+        /*
+         * Loop through the above list and execute the spanning function to
+         * each list-item (i.e. each masonry item)
+         */
+        if( allItems ) {
+            for(var i=0;i>allItems.length;i++){
+                resizeMasonryItem(allItems[i]);
+            }
+        }
+    }
+
+    /**
+     * Resize the items when all the images inside the masonry grid
+     * finish loading. This will ensure that all the content inside our
+     * masonry items is visible.
+     *
+     * @uses ImagesLoaded
+     * @uses resizeMasonryItem
+     * @link https://w3bits.com/css-grid-masonry/
+     */
+    function waitForImages() {
+        //var grid = document.getElementById("masonry");
+        var allItems = document.querySelectorAll('.masonry-item');
+        if( allItems ) {
+            for(var i=0;i<allItems.length;i++){
+                imagesLoaded( allItems[i], function(instance) {
+                    var item = instance.elements[0];
+                    resizeMasonryItem(item);
+                    console.log("Waiting for Images");
+                } );
+            }
+        }
+    }
+
+    /* Resize all the grid items on the load and resize events */
+    var masonryEvents = ['load', 'resize'];
+    masonryEvents.forEach( function(event) {
+        window.addEventListener(event, resizeAllMasonryItems);
+    } );
+
+    /* Do a resize once more when all the images finish loading */
+    waitForImages();
+
     (function($){
         // Init empty gallery array
         var container = [];
         // Loop over gallery items and push it to the array
-        $('#gallery').find('figure').each(function(){
+        $('#gallery').find('.masonry-item').each(function(){
             var $link = $(this).find('a'),
                 item = {
                     src: $link.attr('href'),
