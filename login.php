@@ -1,4 +1,13 @@
 <?php
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+if (!session_id()) {
+    session_start();
+}
+
 require_once("vendor/autoload.php");
 $fb = new \Facebook\Facebook([
     'app_id' => '',
@@ -10,6 +19,6 @@ $fb = new \Facebook\Facebook([
 $helper = $fb->getRedirectLoginHelper();
 
 $permissions = ['email']; // Optional permissions
-$loginUrl = $helper->getLoginUrl('http://localhost:8080/', $permissions);
+$loginUrl = $helper->getLoginUrl('https://pinebox.shop/', $permissions);
 
 echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';

@@ -4,7 +4,13 @@ require_once("vendor/autoload.php");
 use Rakit\Validation\Validator;
 use Sabre\HTTP;
 
-/*$fb = new \Facebook\Facebook([
+/*if (!session_id()) {
+    session_start();
+}
+
+// https://www.facebook.com/thepineboxshop/photos/?tab=album&album_id=1557869774370222
+
+$fb = new \Facebook\Facebook([
     'app_id' => '',
     'app_secret' => '',
     'default_graph_version' => 'v2.10',
@@ -29,7 +35,9 @@ try {
 try {
     // Get the \Facebook\GraphNodes\GraphUser object for the current user.
     // If you provided a 'default_access_token', the '{access-token}' is optional.
-    $response = $fb->get('/me', $accessToken);
+    //$response = $fb->get('/me', $accessToken);
+    $response = $fb->get('/1557869774370222/photos', $accessToken);
+
 } catch(\Facebook\Exceptions\FacebookResponseException $e) {
     // When Graph returns an error
     echo 'Graph returned an error: ' . $e->getMessage();
@@ -38,10 +46,7 @@ try {
     // When validation fails or other local issues
     echo 'Facebook SDK returned an error: ' . $e->getMessage();
     exit;
-}
-
-$me = $response->getGraphUser();
-echo 'Logged in as ' . $me->getName();*/
+}*/
 
 $request = HTTP\Sapi::getRequest();
 
@@ -75,20 +80,22 @@ if(isset($post) && !empty($post)){
 
         $mail->IsSMTP();
         $mail->Mailer = "smtp";
-        $mail->SMTPDebug  = 1;
+        $mail->SMTPDebug  = 0;
         $mail->SMTPAuth   = TRUE;
         $mail->SMTPSecure = "tls";
-        $mail->Port       = 587;
-        $mail->Host       = "smtp.gmail.com";
-        $mail->Username   = "me@bennyjake.com";
-        $mail->Password   = "quietracket22";
 
-        $mail->setFrom('me@bennyjake.shop');
-        $mail->addAddress('ben.chrisman.87@gmail.com', 'Ben Chrisman');
+        // /etc/php/7.2/fpm/pool.d/www.conf
+        $mail->Port       = getenv('PINEBOXSHOP_PORT');
+        $mail->Host       = getenv('PINEBOXSHOP_HOST');
+        $mail->Username   = getenv('PINEBOXSHOP_USER');
+        $mail->Password   = getenv('PINEBOXSHOP_PASS');
+
+        $mail->setFrom(getenv('PINEBOXSHOP_FROM'));
+        $mail->addAddress(getenv('PINEBOXSHOP_TOEM'), getenv('PINEBOXSHOP_TONM'));
 
         // Content
         $mail->isHTML(true);                                  // Set email format to HTML
-        $mail->Subject = 'The Pinebox Shop Website';
+        $mail->Subject = 'The Pine Box Shop Website';
         $mail->Body    = 'Name: ' . $validatedData['name'];
         $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
@@ -181,7 +188,7 @@ if(isset($post) && !empty($post)){
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>One Page Wonder - Start Bootstrap Template</title>
+  <title>The Pine Box Shop</title>
     <script src="js/lightbox-plus-jquery.js"></script>
 
 
@@ -232,7 +239,7 @@ if(isset($post) && !empty($post)){
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
     <div class="container">
-      <a class="navbar-brand" data-link="#home" href="#home">The Pinebox Shop</a>
+      <a class="navbar-brand" data-link="#home" href="#home">The Pine Box Shop</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -278,7 +285,7 @@ if(isset($post) && !empty($post)){
           </div>
       </div>-->
       <div class="d-flex text-center align-items-center">
-              <img src="img/PB_Logo_Final.svg" id="home-logo" class="centered"/>
+              <img src="img/PB_Logo_Final.svg" id="home-logo" class="centered-logo"/>
       </div>
   </header>
 
@@ -292,7 +299,7 @@ if(isset($post) && !empty($post)){
         </div>
         <div class="col-lg-6 order-lg-1">
           <div>
-            <h2 class="display-4">Custom, Affordable Woodwork</h2>
+            <h2 class="display-4">About Pine Box Shop</h2>
             <p>About me goes here.</p>
           </div>
         </div>
@@ -305,8 +312,8 @@ if(isset($post) && !empty($post)){
               <!-- Galley wrapper that contains all items -->
               <div id="gallery" class="gallery" itemscope itemtype="http://schema.org/ImageGallery">
                   <div>
-                      <h2 class="display-4 text-center">Custom, Affordable Woodwork</h2>
-                      <p>About me goes here.</p>
+                      <h2 class="display-4 text-center">Work Examples</h2>
+                      <p>Some blurbage.</p>
                   </div>
                   <div class="row">
 
@@ -474,14 +481,13 @@ if(isset($post) && !empty($post)){
     <!-- /.container -->
   </footer>
 
-  <!-- Bootstrap core JavaScript -->
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-
   <!-- Import jQuery and PhotoSwipe Scripts -->
   <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.0/photoswipe.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.0/photoswipe-ui-default.min.js"></script>
 
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
 </body>
 <script src="js/menuspy.min.js"></script>
