@@ -83,11 +83,11 @@ task('phing-copy', function(){
     }
 
     $variables = $result['data']['data'];
-
+    writeln(run('whoami'));
     writeln(run('[ -d "{{release_path}}" ] && echo "Directory {{release_path}} exists."'));
     writeln(run('[ -d "{{release_path}}/vendor" ] && echo "Directory {{release_path}}/vendor exists."'));
 
-    run('cd {{release_path}} && phing \
+    run('cd {{release_path}} && ~/.composer/vendor/bin/phing \
    build \
    -f build.xml \
     -D PINEBOXSHOP_PORT="' . $variables['smtp_port'] . '" \
