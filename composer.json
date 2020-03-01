@@ -4,6 +4,7 @@
         "rakit/validation": "^1.2",
         "sabre/http": "^5.0",
         "facebook/graph-sdk": "^5.7",
-        "deployer/deployer": "^6.7"
+        "deployer/deployer": "^6.7",
+        "psecio/vaultlib": "0.1"
     }
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="pineboxshop" default="build">
+
+    <!-- build dev for dev envs -->
+    <target name="build" depends="setVariables" />
+    
+	<target name="setVariables" description="Create the Dreamweaver conn*.php files and replace the tokens">
+		<copy file="${project.basedir}/config.php.dist" tofile="${project.basedir}/config.php" overwrite="true">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="PINEBOXSHOP_PORT" value="${PINEBOXSHOP_PORT}" />
+					<token key="PINEBOXSHOP_HOST" value="${PINEBOXSHOP_HOST}" />
+					<token key="PINEBOXSHOP_USER" value="${PINEBOXSHOP_USER}" />
+					<token key="PINEBOXSHOP_PASS" value="${PINEBOXSHOP_PASS}" />
+					<token key="PINEBOXSHOP_FROM" value="${PINEBOXSHOP_FROM}" />
+					<token key="PINEBOXSHOP_TOEM" value="${PINEBOXSHOP_TOEM}" />
+					<token key="PINEBOXSHOP_TONM" value="${PINEBOXSHOP_TONM}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+
+	</target>
+</project>

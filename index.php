@@ -1,8 +1,40 @@
 <?php
 require_once("vendor/autoload.php");
 
+// env variables
+// /etc/php/7.2/fpm/pool.d/www.conf
+
 use Rakit\Validation\Validator;
 use Sabre\HTTP;
+
+var_dump(getenv('VAULT_KEY_1'));
+
+$config = [
+    'book1' => [
+        'title' => 'Placeholder',
+        'description' => 'Placeholder',
+    ],
+    'coffee1' => [
+        'title' => 'Placeholder',
+        'description' => 'Placeholder',
+    ],
+    'coffee2' => [
+        'title' => 'Placeholder',
+        'description' => 'Placeholder',
+    ],
+    'divider1' => [
+        'title' => 'Placeholder',
+        'description' => 'Placeholder',
+    ],
+    'trash1' => [
+        'title' => 'Placeholder',
+        'description' => 'Placeholder',
+    ],
+    'wine1' => [
+        'title' => 'Placeholder',
+        'description' => 'Placeholder',
+    ],
+];
 
 /*if (!session_id()) {
     session_start();
@@ -327,12 +359,13 @@ if(isset($post) && !empty($post)){
                                               <a href="img/gallery_full/<?= $img ?>" data-caption="Sea side, south shore<br><em class='text-muted'>© Dominik Schröder</em>" data-width="1200" data-height="900" itemprop="contentUrl">
                                               <img src="img/gallery_full/<?= $img ?>" alt="Dummy Image">
                                               </a>
-                                              <h3 class="masonry-title">Nesciunt aspernatur eaque similique laudantium
-                                                  a</h3>
-                                              <p class="masonry-description">Lorem ipsum dolor sit amet, consectetur
+                                              <h3 class="masonry-title">
+
+                                                  <?= $config[str_replace(['.jpg','.jpeg'], '', $img)]['title'] ?? "Nesciunt aspernatur eaque similique laudantium a" ?></h3>
+                                              <p class="masonry-description"><?= $config[str_replace(['.jpg','.jpeg'], '', $img)]['description'] ?? "Lorem ipsum dolor sit amet, consectetur
                                                   adipisicing elit. Assumenda modi inventore, totam vero consequuntur,
                                                   aut animi veritatis tempora nulla facere placeat velit illum explicabo
-                                                  dicta enim ipsum. Vitae ducimus, ratione.</p>
+                                                  dicta enim ipsum. Vitae ducimus, ratione."?></p>
                                           </div>
                                       </div>
                                   <?php }
