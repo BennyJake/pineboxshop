@@ -96,7 +96,13 @@ task('phing-copy', function(){
     -D PINEBOXSHOP_PASS="' . $variables['smtp_pass'] . '" \
     -D PINEBOXSHOP_FROM="' . $variables['smtp_from'] . '" \
     -D PINEBOXSHOP_TOEM="' . $variables['smtp_toem'] . '" \
-    -D PINEBOXSHOP_TONM="' . $variables['smtp_tonm'] . '";');
+    -D PINEBOXSHOP_TONM="' . $variables['smtp_tonm'] . '" \
+    -D PINEBOXSHOP_RECAP_SECRET_KEY="' . $variables['recaptcha_secret_key'] . '" \
+    -D PINEBOXSHOP_RECAP_SITE_KEY="' . $variables['recaptcha_site_key'] . '" \
+    -D PINEBOXSHOP_TWILIO_ACCT_SID="' . $variables['twilio_account_sid'] . '" \
+    -D PINEBOXSHOP_TWILIO_AUTH_TOK="' . $variables['twilio_auth_token'] . '" \
+    -D PINEBOXSHOP_TWILIO_FROM_NUM="' . $variables['twilio_from_number'] . '" \
+    -D PINEBOXSHOP_TWILIO_TO_NUM="' . $variables['twilio_to_number'] . '";');
 
 });
 

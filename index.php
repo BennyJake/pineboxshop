@@ -1,15 +1,13 @@
 <?php
 require_once("vendor/autoload.php");
 
-// env variables
-// /etc/php/7.2/fpm/pool.d/www.conf
-
 use Rakit\Validation\Validator;
 use Sabre\HTTP;
+use Twilio\Rest\Client;
 
-var_dump(getenv('VAULT_KEY_1'));
+$config = require_once('config.php');
 
-$config = [
+$imageArray = [
     'book1' => [
         'title' => 'Placeholder',
         'description' => 'Placeholder',
@@ -117,13 +115,13 @@ if(isset($post) && !empty($post)){
         $mail->SMTPSecure = "tls";
 
         // /etc/php/7.2/fpm/pool.d/www.conf
-        $mail->Port       = getenv('PINEBOXSHOP_PORT');
-        $mail->Host       = getenv('PINEBOXSHOP_HOST');
-        $mail->Username   = getenv('PINEBOXSHOP_USER');
-        $mail->Password   = getenv('PINEBOXSHOP_PASS');
+        $mail->Port       = $config['PINEBOXSHOP_PORT'];
+        $mail->Host       = $config['PINEBOXSHOP_HOST'];
+        $mail->Username   = $config['PINEBOXSHOP_USER'];
+        $mail->Password   = $config['PINEBOXSHOP_PASS'];
 
-        $mail->setFrom(getenv('PINEBOXSHOP_FROM'));
-        $mail->addAddress(getenv('PINEBOXSHOP_TOEM'), getenv('PINEBOXSHOP_TONM'));
+        $mail->setFrom($config['PINEBOXSHOP_FROM']);
+        $mail->addAddress($config['PINEBOXSHOP_TOEM'], $config['PINEBOXSHOP_TONM']);
 
         // Content
         $mail->isHTML(true);                                  // Set email format to HTML
@@ -137,6 +135,19 @@ if(isset($post) && !empty($post)){
             //TODO: Catch this somehow
             //echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
+
+        $AccountSid = $config['PINEBOXSHOP_TWILIO_ACCT_SID'];
+        $AuthToken = $config['PINEBOXSHOP_TWILIO_AUTH_TOK'];
+
+        $client = new Client($AccountSid, $AuthToken);
+
+        $sms = $client->account->sms_messages->create(
+            $config['PINEBOXSHOP_TWILIO_FROM_NUM'],
+            [
+                'from' => $config['PINEBOXSHOP_TWILIO_TO_NUM'],
+                'body' => "From BennyJake.com "
+            ]
+        );
     }
 }
 ?>
@@ -361,8 +372,8 @@ if(isset($post) && !empty($post)){
                                               </a>
                                               <h3 class="masonry-title">
 
-                                                  <?= $config[str_replace(['.jpg','.jpeg'], '', $img)]['title'] ?? "Nesciunt aspernatur eaque similique laudantium a" ?></h3>
-                                              <p class="masonry-description"><?= $config[str_replace(['.jpg','.jpeg'], '', $img)]['description'] ?? "Lorem ipsum dolor sit amet, consectetur
+                                                  <?= $imageArray[str_replace(['.jpg','.jpeg'], '', $img)]['title'] ?? "Nesciunt aspernatur eaque similique laudantium a" ?></h3>
+                                              <p class="masonry-description"><?= $imageArray[str_replace(['.jpg','.jpeg'], '', $img)]['description'] ?? "Lorem ipsum dolor sit amet, consectetur
                                                   adipisicing elit. Assumenda modi inventore, totam vero consequuntur,
                                                   aut animi veritatis tempora nulla facere placeat velit illum explicabo
                                                   dicta enim ipsum. Vitae ducimus, ratione."?></p>

@@ -16,6 +16,12 @@
 					<token key="PINEBOXSHOP_FROM" value="${PINEBOXSHOP_FROM}" />
 					<token key="PINEBOXSHOP_TOEM" value="${PINEBOXSHOP_TOEM}" />
 					<token key="PINEBOXSHOP_TONM" value="${PINEBOXSHOP_TONM}" />
+					<token key="PINEBOXSHOP_RECAP_SECRET_KEY" value="${PINEBOXSHOP_RECAP_SECRET_KEY}" />
+					<token key="PINEBOXSHOP_RECAP_SITE_KEY" value="${PINEBOXSHOP_RECAP_SITE_KEY}" />
+					<token key="PINEBOXSHOP_TWILIO_ACCT_SID" value="${PINEBOXSHOP_TWILIO_ACCT_SID}" />
+					<token key="PINEBOXSHOP_TWILIO_AUTH_TOK" value="${PINEBOXSHOP_TWILIO_AUTH_TOK}" />
+					<token key="PINEBOXSHOP_TWILIO_FROM_NUM" value="${PINEBOXSHOP_TWILIO_FROM_NUM}" />
+					<token key="PINEBOXSHOP_TWILIO_TO_NUM" value="${PINEBOXSHOP_TWILIO_TO_NUM}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
