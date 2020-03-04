@@ -146,9 +146,9 @@ if(isset($post) && !empty($post)){
         $client = new TwilioClient($AccountSid, $AuthToken);
 
         $client->messages->create(
-            $config['PINEBOXSHOP_TWILIO_FROM_NUM'],
+            $config['PINEBOXSHOP_TWILIO_TO_NUM'],
             [
-                'from' => $config['PINEBOXSHOP_TWILIO_TO_NUM'],
+                'from' => $config['PINEBOXSHOP_TWILIO_FROM_NUM'],
                 'body' => "From BennyJake.com "
             ]
         );
