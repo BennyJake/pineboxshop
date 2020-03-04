@@ -1,9 +1,13 @@
 <?php
 require_once("vendor/autoload.php");
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 use Rakit\Validation\Validator;
 use Sabre\HTTP;
-use Twilio\Rest\Client;
+use Twilio\Rest\Client as TwilioClient;
 
 $config = require_once('config.php');
 
@@ -139,9 +143,9 @@ if(isset($post) && !empty($post)){
         $AccountSid = $config['PINEBOXSHOP_TWILIO_ACCT_SID'];
         $AuthToken = $config['PINEBOXSHOP_TWILIO_AUTH_TOK'];
 
-        $client = new Client($AccountSid, $AuthToken);
+        $client = new TwilioClient($AccountSid, $AuthToken);
 
-        $sms = $client->account->sms_messages->create(
+        $client->messages->create(
             $config['PINEBOXSHOP_TWILIO_FROM_NUM'],
             [
                 'from' => $config['PINEBOXSHOP_TWILIO_TO_NUM'],

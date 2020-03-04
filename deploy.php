@@ -62,8 +62,6 @@ task('deploy', [
 
 task('phing-copy', function(){
 
-    var_dump($_SERVER);
-
     $accessToken = $_SERVER['VAULT_WEB_TOKEN'];
     $baseUrl = $_SERVER['VAULT_WEB_ROOT'];
 
@@ -83,7 +81,6 @@ task('phing-copy', function(){
     }
 
     $variables = $result['data']['data'];
-    writeln(run('whoami'));
     writeln(run('[ -d "{{release_path}}" ] && echo "Directory {{release_path}} exists."'));
     writeln(run('[ -d "{{release_path}}/vendor" ] && echo "Directory {{release_path}}/vendor exists."'));
 
