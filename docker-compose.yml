@@ -1,4 +1,6 @@
 # run "docker-compose up -d"
+# localhost:8081
+#
 # tell docker what version of the docker-compose.yml were using
 version: '3'
 
