@@ -145,10 +145,6 @@ if(isset($post) && !empty($post)){
 
         $client = new TwilioClient($AccountSid, $AuthToken);
 
-        echo '<pre>';
-        var_dump($config);
-        echo '</pre>';
-
         $client->messages->create(
             $config['PINEBOXSHOP_TWILIO_TO_NUM'],
             [
