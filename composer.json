@@ -7,6 +7,6 @@
         "deployer/deployer": "^6.7",
         "psecio/vaultlib": "0.1",
         "twilio/sdk": "6.0.0",
-        "google/recaptcha": "1.2.3"
+        "google/recaptcha": "^1.2"
     }
 }
